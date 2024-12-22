@@ -37,6 +37,35 @@ function addTransactionDOM(transaction) {
 
 
 
+// Update the balance, income and expense
+function updateBalance() {
+    // creat an array with all amounts from the transactions
+    const amounts = transactions.map(item =>
+        item.amount
+    );
+
+    const total = amounts.reduce((acc, item) => (acc + item), 0).toFixed(2);
+
+    const income = amounts
+        .filter(item => item > 0)
+        .reduce((acc, item) => (acc + item), 0)
+        .toFixed(2);
+    
+    // get the positive value of the expense
+    const expense =
+        ( amounts
+        .filter(item => item < 0)
+        .reduce((acc, item) => (acc + item), 0) * -1 ).toFixed(2);
+
+    balance.innerText = `$${total}`;
+    money_plus.innerText = `$${income}`;
+    money_minus.innerText = `$${expense}`;
+}
+
+
+
+
+
 // Init app
 function init() {
     list.innerHTML = '';
@@ -44,6 +73,8 @@ function init() {
     transactions.forEach(item => {
         addTransactionDOM(item);
     }); 
+
+    updateBalance();
 
 }
 
