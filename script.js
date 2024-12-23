@@ -7,15 +7,23 @@ const text = document.getElementById('text');
 const amount = document.getElementById('amount');
 
 
-const dummyTransaction = [
-    { id: 1, text: 'Flower', amount: -20 }, 
-    { id: 2, text: 'Salary', amount: 300 }, 
-    { id: 3, text: 'Book', amount: -10 }, 
-    { id: 4, text: 'Camera', amount: 150 }, 
-];
+// const dummyTransaction = [
+//     { id: 1, text: 'Flower', amount: -20 }, 
+//     { id: 2, text: 'Salary', amount: 300 }, 
+//     { id: 3, text: 'Book', amount: -10 }, 
+//     { id: 4, text: 'Camera', amount: 150 }, 
+// ];
 
-let transactions = dummyTransaction; 
 
+
+// check if there's sth in the local storage, then set it to the 'localStorageTransaction', or, just set it to an empty array
+let transactions = localStorage.getItem('transactions') !== null ? JSON.parse(localStorage.getItem('transactions')) : []; 
+
+
+// Update local storage transactions
+function updateLocalStorage() {
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+}
 
 
 
@@ -37,6 +45,8 @@ function addTransaction(e) {
         addTransactionDOM(transaction);
 
         updateBalance(); 
+
+        updateLocalStorage();
 
         // clean up the form: text & amount
         text.value = '';
@@ -77,6 +87,8 @@ function addTransactionDOM(transaction) {
 // Remove transaction with it's ID
 function removeTransaction(id) {
     transactions = transactions.filter(item => item.id !== id);
+
+    updateLocalStorage();
     
     init();
 }
